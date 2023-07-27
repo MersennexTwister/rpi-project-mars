@@ -1,5 +1,5 @@
 import requests
-import os
+import os, sys, io
 import RPi.GPIO as GPIO
 import time
 import picamera
@@ -16,16 +16,26 @@ rqs = requests.Session()
 prev_p, cur_p = False, False
 prev_m, cur_m = False, False
 
+s = sys.stdin.read()
+
 config = configparser.ConfigParser()
-config.read('conf.ini')
+config.read_file(io.StringIO(s))
 
 URL = config["system-data"]['url']
+
 LOGIN = config["user-data"]["login"]
+
 PASSWORD = config["user-data"]["password"]
+
 APP_ROOT = config["system-data"]["root"]
 
 
 camera = picamera.PiCamera()
+
+def write_to_log(text):
+    f = open(f"{APP_ROOT}/log", "a")
+    f.write(text)
+    f.close()
 
 def setup():
     camera.resolution = (480, 320)
@@ -63,15 +73,18 @@ def image_request(mark):
     data = soup.findAll('b')
     if len(data) == 0:
         print('Система не смогла распознать ученика в камере')
+        write_to_log("Cannot classify\n")
     else:
         print(f'Имя ученика: {data[0].text}')
+        write_to_log(f"Name: {data[0].text} Mark: {mark}\n")
     
     time.sleep(5)
     camera.start_preview()
 
 
 
-if __name__ == '__main__':
+if True:
+
     setup()
 
     camera.start_preview()
@@ -81,6 +94,7 @@ if __name__ == '__main__':
         cur_m = GPIO.input(BUTTON_M)
 
         if GPIO.input(BUTTON_STOP):
+            os.system(f'lxterminal -e "python3 {APP_ROOT}/mainloop.py < {APP_ROOT}/conf.ini"')
             exit()
 
         if not prev_p and cur_p:
