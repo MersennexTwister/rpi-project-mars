@@ -6,6 +6,9 @@
  - **rpi\_handler.py** - основной исполняемый файл
  - **rpi_image_cache** - папка для сохранения распознаваемых изображений
  - **conf.ini** - конфигурационный файл
+ - **mainloop.py** - скрипт, запускающийся при прерывании программы и отображающий лог
+ - **log** - лог распознаваний
+ - **auto.sh** - скрипт автозапуска
 
  ### Использование:
 
@@ -25,6 +28,24 @@
 
     Важно, чтобы в конце root не было слеша.
 
- 3. #### Запустите rpi_handler.py
+ 3. #### Исправьте пути до conf.ini и rpi_handler.py в auto.sh
 
-        $ python3 rpi_handler.py 
+ 4. #### Запустите auto.sh
+
+        $ ./auto.sh
+
+
+### Бонус. Автозапуск
+
+Если необходимо, чтобы скрипт запускался при запуске системы, откройте файл:
+
+       $ sudo vi /etc/xdg/lxsession/LXDE-pi/autostart
+
+И напишите в предпоследнюю строку файла:
+
+       @lxpanel --profile LXDE-pi
+       @pcmanfm --desktop --profile LXDE-pi
+
+       @lxterminal -e "/path/to/auto.sh" //<- надо вставить это
+
+       @xscreensaver -no-splash
