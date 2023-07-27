@@ -16,12 +16,12 @@
  2. #### Заполните конфигурационный файл conf.ini в формате:
 
         [user-data]
-        login='_ваш логин_'
-        password = '_ваш пароль_'
+        login=_ваш логин_
+        password = _ваш пароль_
 
         [system-data]
-        root='/путь/до/репозитория/rpi-project-mars'
-        url='http://176.120.8.20/'
+        root=/путь/до/репозитория/rpi-project-mars
+        url=http://176.120.8.20/
 
     Важно, чтобы в конце root не было слеша.
 

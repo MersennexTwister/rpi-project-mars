@@ -1,4 +1,4 @@
-import requests as rqs
+import requests
 import os
 import RPi.GPIO as GPIO
 import time
@@ -10,6 +10,8 @@ BUTTON_P = 8
 BUTTON_M = 10
 BUTTON_STOP = 12
 DELAY_SEC = 0.05
+
+rqs = requests.Session()
 
 prev_p, cur_p = False, False
 prev_m, cur_m = False, False
