@@ -35,11 +35,15 @@ def setup():
     GPIO.setup(BUTTON_STOP, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 def image_request(mark):
+    camera.stop_preview()
+    print(f'Button {mark} pressed')
+
     camera.resolution = (2160, 1440)
 
     r = rqs.post(URL + 'login', data={'login': LOGIN, 'password': PASSWORD})
     
     camera.capture(APP_ROOT + '/rpi_image_cache/cached.jpg')
+    print("Photo saved")
     
     img = open(APP_ROOT + '/rpi_image_cache/cached.jpg', 'rb')
 
@@ -59,6 +63,8 @@ def image_request(mark):
         print('Система не смогла распознать ученика в камере')
     else:
         print(f'Имя ученика: {data[0].text}')
+    
+    time.sleep(5)
 
 
 
@@ -78,8 +84,6 @@ if __name__ == '__main__':
             time.sleep(DELAY_SEC)
             cur_p = GPIO.input(BUTTON_P)
             if not prev_p and cur_p:
-                camera.stop_preview()
-                print("Button + pressed")
                 image_request('+')
                 camera.start_preview()
             
@@ -87,8 +91,6 @@ if __name__ == '__main__':
             time.sleep(DELAY_SEC)
             cur_m = GPIO.input(BUTTON_M)
             if not prev_m and cur_m:
-                camera.stop_preview()
-                print("Button - pressed")
                 image_request('-') 
                 camera.start_preview()
 
