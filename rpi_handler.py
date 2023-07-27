@@ -65,6 +65,7 @@ def image_request(mark):
         print(f'Имя ученика: {data[0].text}')
     
     time.sleep(5)
+    camera.start_preview()
 
 
 
@@ -85,14 +86,12 @@ if __name__ == '__main__':
             cur_p = GPIO.input(BUTTON_P)
             if not prev_p and cur_p:
                 image_request('+')
-                camera.start_preview()
             
         elif not prev_m and cur_m:
             time.sleep(DELAY_SEC)
             cur_m = GPIO.input(BUTTON_M)
             if not prev_m and cur_m:
                 image_request('-') 
-                camera.start_preview()
 
         prev_p = cur_p
         prev_m = cur_m
